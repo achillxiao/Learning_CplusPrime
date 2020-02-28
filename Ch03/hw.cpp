@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <iterator>
 using std::cin;
 using std::string;
 using std::vector;
@@ -70,7 +71,21 @@ void c03_05()
     for (auto a : text)
         std::cout << a << std::endl;
 }
-
+void c03_06(){
+    string a("thisisatext");
+    auto beg = a.begin(), end = a.end();
+}
+void c03_07(){
+    int a[10];
+    int *parry[10];
+    int (*parray2)[10] = &a;
+    int (&parray3)[10] = a;
+}
+void c03_08(){
+    int a[] = {2,4,6,1,8};
+    vector<int> new_vecint(a+1,a+3);
+    std::cout<<new_vecint[0]<<"  val1--val2   "<<new_vecint[1]<<std::endl;
+}
 //______________----------------------__________
 int main()
 {
@@ -80,6 +95,7 @@ int main()
     // c03_02();
     // c03_03();
     // c03_04();
-    c03_05();
+    // c03_05();
+    c03_08();
     return 0;
 }
