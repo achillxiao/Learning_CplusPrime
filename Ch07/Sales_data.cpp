@@ -1,35 +1,31 @@
-#include<iostream>
-#include<string>
+#include <iostream>
+#include <string>
+#include "xiao.h"
 
-using std::string; using std::cin; using std::cout; using std::endl;
+using std::cin;
+using std::cout;
+using std::endl;
+using std::istream;
+using std::ostream;
+using std::string;
 
-struct Sales_data
+int main()
 {
-    string isbn() const {return bookNo;}
-    Sales_data& combine(const Sales_data&);
-    double avg_price() const;
-    string bookNo;
-    unsigned units_sold =0;
-    double revenue = 0;
-};
-
-int main(){
-    Sales_data total;
-    if( cin >> total.bookNo>>total.units_sold>>total.revenue){
+    Sales_data total ;
+    if (read(cin, total))
+    {
         Sales_data trans;
-        while(cin >> trans.bookNo>>trans.units_sold>>trans.revenue){
-            if(trans.bookNo == total.bookNo){
-                total.revenue+=trans.revenue;
-                total.units_sold+=trans.revenue;
-            }
+        while (read(cin, trans))
+        {
+            if (trans.bookNo == total.bookNo)
+                total.combine(trans);
             else
             {
-                cout << total.bookNo << " " << total.units_sold << " " << total.revenue << endl;
+                print(cout, total) << endl;
                 total = trans;
             }
-            
         }
-        cout << total.bookNo << " " << total.units_sold << " " << total.revenue << endl;
+        print(cout, total) << endl;
     }
     else
     {
@@ -37,5 +33,45 @@ int main(){
         return -1;
     }
     return 0;
+}
 
+//-------------------------FUNC------------------------------
+
+Sales_data::Sales_data( istream &is){
+    cout<<"nihao"<<endl;
+    read(is,*this);
+}
+double Sales_data::avg_price() const
+{
+    if (units_sold)
+    {
+        return revenue / units_sold;
+    }
+    else
+        return 0;
+}
+Sales_data &Sales_data::combine(const Sales_data &rhs)
+{
+    units_sold += rhs.units_sold;
+    revenue += rhs.revenue;
+    return *this;
+}
+Sales_data add(const Sales_data &lhs, const Sales_data &rhs)
+{
+    Sales_data sum = lhs;
+    sum.combine(rhs);
+    return sum;
+}
+ostream &print(ostream &os, const Sales_data &iterm)
+{
+    os << iterm.isbn() << " " << iterm.units_sold << " "
+       << iterm.revenue << " " << iterm.avg_price();
+    return os;
+}
+istream &read(istream &is, Sales_data &iterm)
+{
+    double price = 0;
+    is >> iterm.bookNo >> iterm.units_sold >> price;
+    iterm.revenue = price * iterm.units_sold;
+    return is;
 }

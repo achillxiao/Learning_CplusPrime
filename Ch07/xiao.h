@@ -2,16 +2,37 @@
 #define XIAO_H
 
 #include <string>
+#include <iostream>
 
-using std::string;
+using std::string; using std::cin; using std::cout; using std::endl;
+using std::istream; using std::ostream;
 
-int cnt_function();
-void change_refference(int &ref);
-void change_pointer(int *ptr);
-const string &compare_length(const string &s1, const string &s2);
-auto plus_10(int (&i)[10]) -> int (*)[10];
-int *plus_5(int i[] ,int length);
+class Sales_data
+{
+    friend Sales_data add(const Sales_data&, const Sales_data&);
+    friend ostream &print(ostream&,const Sales_data&);
+    friend istream &read(istream&, Sales_data&);
 
-void print(const int *beg , const int *end);
+    double avg_price() const
+        { return units_sold? revenue/units_sold : 0;}
+    string bookNo;
+    unsigned units_sold =0;
+    double revenue = 0.0;
+
+public:
+    Sales_data() = default;
+    Sales_data(const string &s , unsigned &u , double p):bookNo(s),
+                            units_sold(u),revenue(u*p){}
+    Sales_data(const string &s):bookNo(s){}
+    Sales_data(istream&);
+
+    string isbn() const {return this->bookNo;}
+    Sales_data& combine(const Sales_data&);
+};
+
+
+Sales_data add(const Sales_data&, const Sales_data&);
+ostream &print(ostream&,const Sales_data&);
+istream &read(istream&, Sales_data&);
 
 #endif
